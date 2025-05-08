@@ -120,7 +120,7 @@ class HFCausalLLMBackbone(LLMBackbone, ABC):
         if not self.inference_mode:
             overwatch.info(f"Loading [bold]{llm_family}[/] LLM from [underline]`{hf_hub_path}`[/]", ctx_level=1)
             self.llm = llm_cls.from_pretrained(
-                hf_hub_path,
+                '/limx/tos/limx_mani_checkpoints/open_source/huggingface/Llama-2-7b-hf',
                 token=hf_token,
                 use_flash_attention_2=use_flash_attention_2 if not self.inference_mode else False,
                 # The following parameters are set to prevent `UserWarnings` from HF; we want greedy decoding!
@@ -150,7 +150,7 @@ class HFCausalLLMBackbone(LLMBackbone, ABC):
         # Load (Fast) Tokenizer
         overwatch.info(f"Loading [bold]{llm_family}[/] (Fast) Tokenizer via the AutoTokenizer API", ctx_level=1)
         self.tokenizer = AutoTokenizer.from_pretrained(
-            hf_hub_path, model_max_length=self.llm_max_length, token=hf_token, padding_side="right"
+            '/limx/tos/limx_mani_checkpoints/open_source/huggingface/Llama-2-7b-hf', model_max_length=self.llm_max_length, token=hf_token, padding_side="right"
         )
 
         # Validation =>> Our VLM logic currently operates under the assumption that the tokenization of a new input

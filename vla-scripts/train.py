@@ -94,7 +94,6 @@ class TrainConfig:
         self.warmup_ratio = self.vla.warmup_ratio
 
         self.train_strategy = self.vla.train_strategy
-
         # [Validate] Assert on `expected_world_size`
         assert (
             self.vla.expected_world_size == overwatch.world_size()

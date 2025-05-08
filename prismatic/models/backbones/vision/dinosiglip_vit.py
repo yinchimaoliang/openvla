@@ -48,13 +48,16 @@ class DinoSigLIPViTBackbone(VisionBackbone):
 
         # Initialize both Featurizers (ViTs) by downloading from HF / TIMM Hub if necessary
         self.dino_featurizer: VisionTransformer = timm.create_model(
-            self.dino_timm_path_or_url, pretrained=True, num_classes=0, img_size=self.default_image_size
+            self.dino_timm_path_or_url, pretrained=True, num_classes=0, img_size=self.default_image_size,
+             pretrained_cfg={'file': '/limx_jeff/tos/limx_mani_checkpoints/open_source/huggingface/vit_large_patch14_reg4_dinov2.lvd142m/model.safetensors'}
         )
         self.dino_featurizer.eval()
 
         self.siglip_featurizer: VisionTransformer = timm.create_model(
-            self.siglip_timm_path_or_url, pretrained=True, num_classes=0, img_size=self.default_image_size
+            self.siglip_timm_path_or_url, pretrained=True, num_classes=0, img_size=self.default_image_size,
+         pretrained_cfg={'file': '/limx_jeff/tos/limx_mani_checkpoints/open_source/huggingface/ViT-SO400M-14-SigLIP/open_clip_model.safetensors'}
         )
+        
         self.siglip_featurizer.eval()
 
         # Monkey-Patch the `forward()` function of the featurizers to ensure FSDP-compatibility

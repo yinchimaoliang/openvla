@@ -212,6 +212,12 @@ def finetune(cfg: FinetuneConfig) -> None:
         image_transform=processor.image_processor.apply_transform,
         prompt_builder_fn=PurePromptBuilder if "v01" not in cfg.vla_path else VicunaV15ChatPromptBuilder,
     )
+    import numpy as np
+    np.random.seed(0)
+    torch.manual_seed(0)
+    torch.cuda.random.manual_seed(0)
+    import tensorflow as tf
+    tf.random.set_seed(0)
     vla_dataset = RLDSDataset(
         cfg.data_root_dir,
         cfg.dataset_name,
@@ -219,6 +225,7 @@ def finetune(cfg: FinetuneConfig) -> None:
         resize_resolution=tuple(vla.module.config.image_sizes),
         shuffle_buffer_size=cfg.shuffle_buffer_size,
         image_aug=cfg.image_aug,
+        train=True
     )
 
     # [Important] Save Dataset Statistics =>> used to de-normalize actions for inference!
