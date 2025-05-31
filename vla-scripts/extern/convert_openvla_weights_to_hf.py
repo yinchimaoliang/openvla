@@ -181,13 +181,31 @@ def convert_openvla_weights_to_hf(cfg: HFConvertConfig) -> None:
     print("[*] Loading TIMM Vision Backbone(s) and Image Transform(s) =>> Initializing PrismaticImageProcessor")
     input_sizes, interpolations, means, stds = [], [], [], []
     for idx, timm_model_id in enumerate(hf_config.timm_model_ids):
-        timm_vision_backbone = timm.create_model(
+        if idx == 0:
+            timm_vision_backbone = timm.create_model(
             timm_model_id,
             pretrained=True,
             num_classes=0,
             img_size=hf_config.image_sizes[idx],
             act_layer=hf_config.timm_override_act_layers[idx],
+            pretrained_cfg={'file': '/limx_jeff/tos/limx_mani_checkpoints/open_source/huggingface/vit_large_patch14_reg4_dinov2.lvd142m/model.safetensors'}
         )
+        if idx == 1:
+            timm_vision_backbone = timm.create_model(
+            timm_model_id,
+            pretrained=True,
+            num_classes=0,
+            img_size=hf_config.image_sizes[idx],
+            act_layer=hf_config.timm_override_act_layers[idx],
+            pretrained_cfg={'file': '/limx_jeff/tos/limx_mani_checkpoints/open_source/huggingface/ViT-SO400M-14-SigLIP/open_clip_model.safetensors'}
+        )
+        # timm_vision_backbone = timm.create_model(
+        #     timm_model_id,
+        #     pretrained=True,
+        #     num_classes=0,
+        #     img_size=hf_config.image_sizes[idx],
+        #     act_layer=hf_config.timm_override_act_layers[idx],
+        # )
 
         # Get Per-Backbone Image Processing
         data_cfg = timm.data.resolve_model_data_config(timm_vision_backbone)
