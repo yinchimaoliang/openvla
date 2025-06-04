@@ -84,9 +84,9 @@ class FinetuneConfig:
     adapter_tmp_dir: Path = Path("adapter-tmp")                     # Temporary directory for LoRA weights before fusing
 
     # Fine-tuning Parameters
-    batch_size: int = 16                                            # Fine-tuning batch size
-    max_steps: int = 200_000                                        # Max number of fine-tuning steps
-    save_steps: int = 5000                                          # Interval for checkpoint saving
+    batch_size: int = 4                                           # Fine-tuning batch size
+    max_steps: int = 200000                                        # Max number of fine-tuning steps
+    save_steps: int = 20000                                          # Interval for checkpoint saving
     learning_rate: float = 5e-4                                     # Fine-tuning learning rate
     grad_accumulation_steps: int = 1                                # Gradient accumulation steps
     image_aug: bool = True                                          # Whether to train with image augmentations
@@ -212,12 +212,6 @@ def finetune(cfg: FinetuneConfig) -> None:
         image_transform=processor.image_processor.apply_transform,
         prompt_builder_fn=PurePromptBuilder if "v01" not in cfg.vla_path else VicunaV15ChatPromptBuilder,
     )
-    import numpy as np
-    np.random.seed(0)
-    torch.manual_seed(0)
-    torch.cuda.random.manual_seed(0)
-    import tensorflow as tf
-    tf.random.set_seed(0)
     vla_dataset = RLDSDataset(
         cfg.data_root_dir,
         cfg.dataset_name,
